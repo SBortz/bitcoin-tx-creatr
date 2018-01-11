@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using CommandDotNet.Attributes;
 using NBitcoin;
@@ -66,6 +67,21 @@ namespace bitcoin_tx_creatr
 
 			tx.Outputs.Add(new TxOut(amount, scriptPubKey));
 			WriteTransaction(tx);
+
+		    return 0;
+	    }
+
+	    [ApplicationMetadata(Description = "Takes a raw transaction and signs it.")]
+	    public int Sign([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "privatekey", Description = "Private key")]string privateKeyString)
+	    {
+		    var privKey = new BitcoinSecret(privateKeyString);
+
+		    var tx = new Transaction(transactionHex);
+			tx.Inputs.First().ScriptSig = privKey.ScriptPubKey;
+		    tx.Sign(privKey, false);
+
+		    Console.WriteLine($"You signed your transaction on the {privKey.Network}");
+		    WriteTransaction(tx);
 
 		    return 0;
 	    }
