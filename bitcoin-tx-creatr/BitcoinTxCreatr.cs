@@ -8,7 +8,7 @@ using NBitcoin;
 
 namespace bitcoin_tx_creatr
 {
-	[ApplicationMetadata(Description = "Howdy friend, i am your bitcoin-tx-creatr.", ExtendedHelpText = "I can create bitcoin transactions manually for you.")]
+	[ApplicationMetadata(Description = "Howdy friend, i am your bitcoin-tx-creatr.", ExtendedHelpText = "\nI can create bitcoin transactions manually for you.")]
 	public class BitcoinTxCreatr
     {
 	    [ApplicationMetadata(Description = "Creates an empty transaction")]
@@ -83,6 +83,24 @@ namespace bitcoin_tx_creatr
 		    Console.WriteLine($"You signed your transaction on the {privKey.Network}");
 		    WriteTransaction(tx);
 
+		    return 0;
+	    }
+
+	    [ApplicationMetadata(Description = "Takes a raw transaction and calculates the total output and fee.")]
+	    public int GetOutputs([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Description = "Bitcoin amount of tx in")]string amountInString)
+	    {
+		    var tx = new Transaction(transactionHex);
+
+		    var amountIn = Convert.ToDecimal(amountInString, CultureInfo.InvariantCulture);
+		    decimal amountOut = 0;
+		    foreach (var txOutput in tx.Outputs)
+		    {
+			    amountOut += Convert.ToDecimal(txOutput.Value.ToDecimal(MoneyUnit.BTC), CultureInfo.InvariantCulture);
+		    }
+
+		    decimal fee = amountIn - amountOut;
+
+		    Console.WriteLine($"This transaction has total output of {amountOut} BTC and a fee of {fee} BTC.");
 		    return 0;
 	    }
 
