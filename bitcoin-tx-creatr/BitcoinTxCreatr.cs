@@ -10,19 +10,11 @@ namespace bitcoin_tx_creatr
 	public class BitcoinTxCreatr
     {
 	    [ApplicationMetadata(Description = "Creates an empty transaction")]
-		public void Create([Option(LongName = "json", ShortName = "j")]bool json = false)
+		public void Create()
 	    {
-			var tx = new Transaction();
-
-		    if (json)
-		    {
-				Console.WriteLine(tx.ToString());
-			}
-		    else
-		    {
-				Console.WriteLine(tx.ToHex());
-			}
-		}
+		    var tx = new Transaction();
+		    WriteTransaction(tx);
+	    }
 
 	    [ApplicationMetadata(Description = "Takes a raw transaction and returns it in json format.", ExtendedHelpText = "\nTakes a raw transaction and returns it in json format.")]
 		public int Show([Argument(Description = "Raw transaction in hex format")]string transactionHex)
@@ -36,9 +28,8 @@ namespace bitcoin_tx_creatr
 			try
 		    {
 			    var tx = new Transaction(transactionHex);
-			    Console.WriteLine("Here is your transaction:");
-				Console.WriteLine(tx);
-			    return 0;
+				WriteTransaction(tx);
+				return 0;
 			}
 		    catch (Exception ex)
 		    {
@@ -46,5 +37,29 @@ namespace bitcoin_tx_creatr
 			    return 1;
 		    }
 		}
+
+	    public int AddIn([Argument(Description = "Adds an unspent transaction (UTXO) to raw transaction")]string transactionHex, string txId, int index)
+	    {
+		    var outTxId = new uint256(txId);
+			var outPoint = new OutPoint(outTxId, index);
+
+			var txIn = new TxIn(outPoint);
+
+			var tx = new Transaction(transactionHex);
+			tx.Inputs.Add(txIn);
+
+		    WriteTransaction(tx);
+
+			return 0;
+	    }
+
+	    private static void WriteTransaction(Transaction tx)
+	    {
+		    Console.WriteLine("Here is your transaction (json)");
+		    Console.WriteLine(tx.ToString());
+		    Console.WriteLine();
+		    Console.WriteLine("Here is your transaction (hex)");
+		    Console.WriteLine(tx.ToHex());
+	    }
     }
 }
