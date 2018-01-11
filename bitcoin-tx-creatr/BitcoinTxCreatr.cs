@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using CommandDotNet.Attributes;
 using NBitcoin;
@@ -38,7 +39,8 @@ namespace bitcoin_tx_creatr
 		    }
 		}
 
-	    public int AddIn([Argument(Description = "Adds an unspent transaction (UTXO) to raw transaction")]string transactionHex, string txId, int index)
+	    [ApplicationMetadata(Description = "Takes a raw transaction and adds an unspent transaction (UTXO) to it.")]
+		public int AddIn([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Description = "UTXO transaction-id")]string txId, [Argument(Description = "UTXO index")]int index)
 	    {
 		    var outTxId = new uint256(txId);
 			var outPoint = new OutPoint(outTxId, index);
@@ -53,7 +55,22 @@ namespace bitcoin_tx_creatr
 			return 0;
 	    }
 
-	    private static void WriteTransaction(Transaction tx)
+	    [ApplicationMetadata(Description = "Takes a raw transaction and adds a transaction output to it.")]
+		public int AddOut([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "address",Description = "Bitcoin address")]string addressString, [Argument(Name = "amount", Description = "Amount of Bitcoins to send to address")]string amountString)
+	    {
+		    var address = BitcoinAddress.Create(addressString);
+		    var scriptPubKey = new Script(address.ScriptPubKey.ToString());
+		    var amount = new Money(Convert.ToDecimal(amountString, CultureInfo.InvariantCulture), MoneyUnit.BTC);
+
+		    var tx = new Transaction(transactionHex);
+
+			tx.Outputs.Add(new TxOut(amount, scriptPubKey));
+			WriteTransaction(tx);
+
+		    return 0;
+	    }
+
+		private static void WriteTransaction(Transaction tx)
 	    {
 		    Console.WriteLine("Here is your transaction (json)");
 		    Console.WriteLine(tx.ToString());
