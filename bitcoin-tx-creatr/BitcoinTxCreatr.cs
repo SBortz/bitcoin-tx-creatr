@@ -6,9 +6,11 @@ using NBitcoin;
 
 namespace bitcoin_tx_creatr
 {
-    public class BitcoinTxCreatr
+	[ApplicationMetadata(Description = "Howdy friend, i am your bitcoin-tx-creatr.", ExtendedHelpText = "I can create bitcoin transactions manually for you.")]
+	public class BitcoinTxCreatr
     {
-	    public void Create([Option(LongName = "json", ShortName = "j")]bool json = false)
+	    [ApplicationMetadata(Description = "Creates an empty transaction")]
+		public void Create([Option(LongName = "json", ShortName = "j")]bool json = false)
 	    {
 			var tx = new Transaction();
 
@@ -22,20 +24,27 @@ namespace bitcoin_tx_creatr
 			}
 		}
 
-	    public int Show(string hexInput)
+	    [ApplicationMetadata(Description = "Takes a raw transaction and returns it in json format.", ExtendedHelpText = "\nTakes a raw transaction and returns it in json format.")]
+		public int Show([Argument(Description = "Raw transaction in hex format")]string transactionHex)
 	    {
-			if (string.IsNullOrWhiteSpace(hexInput))
+			if (string.IsNullOrWhiteSpace(transactionHex))
 		    {
 			    Console.WriteLine("Please provide a transaction.");
 			    return 1;
 		    }
 
-		    Console.WriteLine("Here is your transaction:");
-
-		    var tx = new Transaction(hexInput);
-		    Console.WriteLine(tx);
-
-		    return 0;
+			try
+		    {
+			    var tx = new Transaction(transactionHex);
+			    Console.WriteLine("Here is your transaction:");
+				Console.WriteLine(tx);
+			    return 0;
+			}
+		    catch (Exception ex)
+		    {
+			    Console.WriteLine("Invalid hex string");
+			    return 1;
+		    }
 		}
     }
 }
