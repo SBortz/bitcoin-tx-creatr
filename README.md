@@ -2,7 +2,7 @@
 
 In the approach of understanding bitcoin transactions i like the idea of having a simple command line tool that makes it simple to create & and manipulate raw bitcoin transactions that could then be sent to the bitcoin network.
 
-So i created this little console app using. It outputs the transaction in json and hex format. The raw transaction output (hex) can then be used as input for further manipulation. So you can construct a valid bitcoin transaction step by step that will be accepted by bitcoin nodes.
+So i created this little console app using the NBitcoin library (https://github.com/MetacoSA/NBitcoin). It outputs the transaction in json and hex format. The raw transaction output (hex) can then be used as input for further manipulation. So you can construct a valid bitcoin transaction step by step that will be accepted by bitcoin nodes.
 
 <b>IMPORTANT: This is the first version and it works only for very simple transactions at the moment. Use it for learning/testing purposes only.</b>
 
@@ -38,20 +38,18 @@ Options:
   -h | --help     Show help information
 
 Commands:
-  add-in            Takes a raw transaction and adds an unspent transaction (UTXO) to it.
-  add-out           Takes a raw transaction and adds a transaction output to it.
-  create            Creates an empty transaction
-  get-outputs       Takes a raw transaction and calculates the total output and fee.
-  remove-in         Takes a raw transaction and removes a transaction input from it.
-  remove-out        Takes a raw transaction and removes a transaction output from it.
-  set-out-amount    Takes a raw transaction and sets the amount of an existing transaction output.
-  set-tx-lockvalue  Takes a raw transaction and sets the amount of an existing transaction output.
-  show              Takes a raw transaction and returns it in json format
-  sign-in           Takes a raw transaction and signs it.
+  add-in            adds an unspent transaction (UTXO) to tx.
+  add-out           adds a transaction output to tx.
+  create            Creates an empty tx
+  get-outputs       calculates the total output and fee.
+  remove-in         removes a transaction input from tx.
+  remove-out        removes a transaction output from tx.
+  set-out-amount    sets the amount of an existing transaction output.
+  set-tx-lockvalue  sets the lock value of tx.
+  show              returns it in json format
+  sign-in           signs one input of tx it.
 
 Use "dotnet bitcoin-tx-creatr.dll [command] --help" for more information about a command.
-
-I can create bitcoin transactions manually for you.
 
 I can create bitcoin transactions manually for you.
 ```
