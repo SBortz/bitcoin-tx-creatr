@@ -73,12 +73,14 @@ namespace bitcoin_tx_creatr
 		    return tx;
 	    }
 
-	    public Tuple<Transaction, string> Sign(string transactionHex, string privateKeyString)
+	    public Tuple<Transaction, string> SignIn(string transactionHex,int index, string privateKeyString)
 	    {
 			var privKey = new BitcoinSecret(privateKeyString);
 
 		    var tx = new Transaction(transactionHex);
-		    tx.Inputs.First().ScriptSig = privKey.ScriptPubKey;
+
+		    var txToSign = tx.Inputs[index];
+		    txToSign.ScriptSig = privKey.ScriptPubKey;
 		    tx.Sign(privKey, false);
 
 		    return Tuple.Create(tx, privKey.Network.ToString());

@@ -114,7 +114,7 @@ namespace bitcoin_tx_creatr.tests
 		    expectedTx.Inputs.First().ScriptSig = privKey.ScriptPubKey;
 		    expectedTx.Sign(privKey, false);
 
-		    var tx = this.txCreatr.Sign(GetTxWithIn(this.txIdIn1, 0).ToHex(), this.privateKey1);
+		    var tx = this.txCreatr.SignIn(GetTxWithIn(this.txIdIn1, 0).ToHex(), 0, this.privateKey1);
 
 			Assert.Equal(expectedTx.ToHex(), tx);
 	    }
