@@ -22,7 +22,7 @@ namespace bitcoin_tx_creatr
 			this.Writer.WriteTransaction(tx);
 	    }
 
-	    [ApplicationMetadata(Description = "Takes a raw transaction and returns it in json format.", ExtendedHelpText = "\nTakes a raw transaction and returns it in json format.")]
+	    [ApplicationMetadata(Description = "Takes a raw transaction and returns it in json format", ExtendedHelpText = "\nTakes a raw transaction and returns it in json format")]
 		public int Show([Argument(Description = "Raw transaction in hex format")]string transactionHex)
 	    {
 			if (string.IsNullOrWhiteSpace(transactionHex))
@@ -63,7 +63,7 @@ namespace bitcoin_tx_creatr
 	    }
 
 		[ApplicationMetadata(Description = "Takes a raw transaction and adds a transaction output to it.")]
-		public int AddOut([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "address",Description = "Bitcoin address")]string addressString, [Argument(Name = "amount", Description = "Amount of Bitcoins to send to address")]string amountString)
+		public int AddOut([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "address",Description = "Bitcoin address (Base58Check)")]string addressString, [Argument(Name = "amount", Description = "Amount of Bitcoins to send to address in BTC. (Format 0.005) ")]string amountString)
 		{
 			var tx = this.TxCreatr.AddOut(transactionHex, addressString, amountString);
 			this.Writer.WriteTransaction(tx);
@@ -72,7 +72,7 @@ namespace bitcoin_tx_creatr
 	    }
 
 	    [ApplicationMetadata(Description = "Takes a raw transaction and sets the amount of an existing transaction output.")]
-	    public int SetAmount([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "index", Description = "Index of vout")]int index, [Argument(Name = "amount", Description = "Amount of Bitcoins to send to address")]string amountString)
+	    public int SetAmount([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "index", Description = "Index of vout")]int index, [Argument(Name = "amount", Description = "Amount of Bitcoins to send to address in BTC. (Format 0.005)")]string amountString)
 	    {
 		    var tx = this.TxCreatr.SetAmount(transactionHex, index, amountString);
 		    this.Writer.WriteTransaction(tx);
@@ -100,7 +100,7 @@ namespace bitcoin_tx_creatr
 
 
 		[ApplicationMetadata(Description = "Takes a raw transaction and signs it.")]
-	    public int Sign([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "privatekey", Description = "Private key")]string privateKeyString)
+	    public int Sign([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "privatekey", Description = "Private key (WIF)")]string privateKeyString)
 		{
 			var tuple = this.TxCreatr.Sign(transactionHex, privateKeyString);
 			Console.WriteLine($"You signed your transaction on the {tuple.Item2}");
@@ -110,7 +110,7 @@ namespace bitcoin_tx_creatr
 	    }
 
 	    [ApplicationMetadata(Description = "Takes a raw transaction and calculates the total output and fee.")]
-	    public int GetOutputs([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Description = "Bitcoin amount of tx in")]string amountInString)
+	    public int GetOutputs([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Description = "Bitcoin amount of txin in BTC (Format: 0.005)")]string amountInString)
 	    {
 		    var tx = new Transaction(transactionHex);
 
