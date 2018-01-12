@@ -4,7 +4,7 @@ In the approach of understanding bitcoin transactions i like the idea of having 
 
 So i created this little console app using. It outputs the transaction in json and hex format. The raw transaction output (hex) can then be used as input for further manipulation. So you can construct a valid bitcoin transaction step by step that will be accepted by bitcoin nodes.
 
-<b>IMPORTANT: This is the first version and it works only for very simple transactions with one input at the moment. Use it for learning/testing purposes only.</b>
+<b>IMPORTANT: This is the first version and it works only for very simple transactions at the moment. Use it for learning/testing purposes only.</b>
 
 # Using the app
 
