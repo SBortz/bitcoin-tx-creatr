@@ -3,114 +3,85 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using CommandDotNet.Attributes;
 using NBitcoin;
 
 namespace bitcoin_tx_creatr
 {
-	[ApplicationMetadata(Description = "Howdy friend, i am your bitcoin-tx-creatr.", ExtendedHelpText = "\nI can create bitcoin transactions manually for you.")]
-	public class BitcoinTxCreatr
+	public class BitcoinTxCreatr : IBitcoinTxCreatr
     {
-	    [ApplicationMetadata(Description = "Creates an empty transaction")]
-		public void Create()
+	    public Transaction Create()
 	    {
-		    var tx = new Transaction();
-		    WriteTransaction(tx);
+		    return new Transaction();
 	    }
 
-	    [ApplicationMetadata(Description = "Takes a raw transaction and returns it in json format.", ExtendedHelpText = "\nTakes a raw transaction and returns it in json format.")]
-		public int Show([Argument(Description = "Raw transaction in hex format")]string transactionHex)
+	    public Transaction AddIn(string transactionHex, string txId, int index)
 	    {
-			if (string.IsNullOrWhiteSpace(transactionHex))
-		    {
-			    Console.WriteLine("Please provide a transaction.");
-			    return 1;
-		    }
+			var tx = new Transaction(transactionHex);
 
-			try
-		    {
-			    var tx = new Transaction(transactionHex);
-				WriteTransaction(tx);
-				return 0;
-			}
-		    catch (Exception ex)
-		    {
-			    Console.WriteLine("Invalid hex string");
-			    return 1;
-		    }
-		}
-
-	    [ApplicationMetadata(Description = "Takes a raw transaction and adds an unspent transaction (UTXO) to it.")]
-		public int AddIn([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Description = "UTXO transaction-id")]string txId, [Argument(Description = "UTXO index")]int index)
-	    {
-		    var outTxId = new uint256(txId);
-			var outPoint = new OutPoint(outTxId, index);
-
+			var outTxId = new uint256(txId);
+		    var outPoint = new OutPoint(outTxId, index);
 			var txIn = new TxIn(outPoint);
 
-			var tx = new Transaction(transactionHex);
-			tx.Inputs.Add(txIn);
+		    tx.Inputs.Add(txIn);
 
-		    WriteTransaction(tx);
-
-			return 0;
+		    return tx;
 	    }
 
-	    [ApplicationMetadata(Description = "Takes a raw transaction and adds a transaction output to it.")]
-		public int AddOut([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "address",Description = "Bitcoin address")]string addressString, [Argument(Name = "amount", Description = "Amount of Bitcoins to send to address")]string amountString)
+	    public Transaction RemoveIn(string transactionHex, int index)
 	    {
-		    var address = BitcoinAddress.Create(addressString);
+			var tx = new Transaction(transactionHex);
+		    tx.Inputs.RemoveAt(index);
+
+		    return tx;
+	    }
+
+	    public Transaction AddOut(string transactionHex, string addressString, string amountString)
+	    {
+			var address = BitcoinAddress.Create(addressString);
 		    var scriptPubKey = new Script(address.ScriptPubKey.ToString());
 		    var amount = new Money(Convert.ToDecimal(amountString, CultureInfo.InvariantCulture), MoneyUnit.BTC);
 
 		    var tx = new Transaction(transactionHex);
 
-			tx.Outputs.Add(new TxOut(amount, scriptPubKey));
-			WriteTransaction(tx);
+		    tx.Outputs.Add(new TxOut(amount, scriptPubKey));
 
-		    return 0;
+		    return tx;
 	    }
 
-	    [ApplicationMetadata(Description = "Takes a raw transaction and signs it.")]
-	    public int Sign([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "privatekey", Description = "Private key")]string privateKeyString)
+	    public Transaction SetAmount(string transactionHex, int index, string amountString)
 	    {
-		    var privKey = new BitcoinSecret(privateKeyString);
+			var tx = new Transaction(transactionHex);
+		    var amount = new Money(Convert.ToDecimal(amountString, CultureInfo.InvariantCulture), MoneyUnit.BTC);
+			var output = tx.Outputs[index];
+		    output.Value = amount;
+
+		    return tx;
+	    }
+
+	    public Transaction SetLockValue(string transactionHex, int lockvalue)
+	    {
+			var tx = new Transaction(transactionHex);
+		    tx.LockTime = new LockTime(lockvalue);
+
+		    return tx;
+	    }
+
+	    public Transaction RemoveOut(string transactionHex, int index)
+	    {
+			var tx = new Transaction(transactionHex);
+			tx.Outputs.RemoveAt(index);
+		    return tx;
+	    }
+
+	    public Tuple<Transaction, string> Sign(string transactionHex, string privateKeyString)
+	    {
+			var privKey = new BitcoinSecret(privateKeyString);
 
 		    var tx = new Transaction(transactionHex);
-			tx.Inputs.First().ScriptSig = privKey.ScriptPubKey;
+		    tx.Inputs.First().ScriptSig = privKey.ScriptPubKey;
 		    tx.Sign(privKey, false);
 
-		    Console.WriteLine($"You signed your transaction on the {privKey.Network}");
-		    WriteTransaction(tx);
-
-		    return 0;
-	    }
-
-	    [ApplicationMetadata(Description = "Takes a raw transaction and calculates the total output and fee.")]
-	    public int GetOutputs([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Description = "Bitcoin amount of tx in")]string amountInString)
-	    {
-		    var tx = new Transaction(transactionHex);
-
-		    var amountIn = Convert.ToDecimal(amountInString, CultureInfo.InvariantCulture);
-		    decimal amountOut = 0;
-		    foreach (var txOutput in tx.Outputs)
-		    {
-			    amountOut += Convert.ToDecimal(txOutput.Value.ToDecimal(MoneyUnit.BTC), CultureInfo.InvariantCulture);
-		    }
-
-		    decimal fee = amountIn - amountOut;
-
-		    Console.WriteLine($"This transaction has total output of {amountOut} BTC and a fee of {fee} BTC.");
-		    return 0;
-	    }
-
-		private static void WriteTransaction(Transaction tx)
-	    {
-		    Console.WriteLine("Here is your transaction (json)");
-		    Console.WriteLine(tx.ToString());
-		    Console.WriteLine();
-		    Console.WriteLine("Here is your transaction (hex)");
-		    Console.WriteLine(tx.ToHex());
+		    return Tuple.Create(tx, privKey.Network.ToString());
 	    }
     }
 }
