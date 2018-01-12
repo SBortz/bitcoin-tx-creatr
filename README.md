@@ -38,18 +38,20 @@ Options:
   -h | --help     Show help information
 
 Commands:
-  AddIn         Takes a raw transaction and adds an unspent transaction (UTXO) to it.
-  AddOut        Takes a raw transaction and adds a transaction output to it.
-  Create        Creates an empty transaction
-  GetOutputs    Takes a raw transaction and calculates the total output and fee.
-  RemoveIn      Takes a raw transaction and removes a transaction input from it.
-  RemoveOut     Takes a raw transaction and removes a transaction output from it.
-  SetAmount     Takes a raw transaction and sets the amount of an existing transaction output.
-  SetLockValue  Takes a raw transaction and sets the amount of an existing transaction output.
-  Show          Takes a raw transaction and returns it in json format.
-  SignIn          Takes a raw transaction and signs it.
+  add-in            Takes a raw transaction and adds an unspent transaction (UTXO) to it.
+  add-out           Takes a raw transaction and adds a transaction output to it.
+  create            Creates an empty transaction
+  get-outputs       Takes a raw transaction and calculates the total output and fee.
+  remove-in         Takes a raw transaction and removes a transaction input from it.
+  remove-out        Takes a raw transaction and removes a transaction output from it.
+  set-out-amount    Takes a raw transaction and sets the amount of an existing transaction output.
+  set-tx-lockvalue  Takes a raw transaction and sets the amount of an existing transaction output.
+  show              Takes a raw transaction and returns it in json format
+  sign-in           Takes a raw transaction and signs it.
 
 Use "dotnet bitcoin-tx-creatr.dll [command] --help" for more information about a command.
+
+I can create bitcoin transactions manually for you.
 
 I can create bitcoin transactions manually for you.
 ```
@@ -81,7 +83,7 @@ Here is your transaction (hex)
 
 Then add a transaction input by copying the hex-output and using it as input for the addin command:
 ```
-> bitcoin-tx-creatr.exe addin previousTransactionHex txId index
+> bitcoin-tx-creatr.exe add-in previousTransactionHex txId index
 
 Here is your transaction (json)
 {
@@ -113,7 +115,7 @@ Use the addout command to add a transaction output. Also provide an address and 
 
 <b> At the moment P2PKH is supported only. </b>
 ```
-> bitcoin-tx-creatr.exe addout previousTransactionHex address amount
+> bitcoin-tx-creatr.exe add-out previousTransactionHex address amount
 
 Here is your transaction (json)
 {
@@ -148,7 +150,7 @@ Here is your transaction (hex)
 
 Sign the transaction with your private key (WIF).
 ```
-> bitcoin-tx-creatr.exe sign previousTransactionHex index privateKey
+> bitcoin-tx-creatr.exe sign-in previousTransactionHex index privateKey
 
 You signed your transaction on the TestNet
 Here is your transaction (json)
