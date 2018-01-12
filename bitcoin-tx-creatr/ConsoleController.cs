@@ -8,7 +8,7 @@ using NBitcoin;
 
 namespace bitcoin_tx_creatr
 {
-	[ApplicationMetadata(Description = "Howdy friend, i am your bitcoin-tx-creatr.", ExtendedHelpText = "\nI can create bitcoin transactions manually for you.")]
+	[ApplicationMetadata(Description = "Hey, bitcoin-tx-creatr here :) How can i help you?", ExtendedHelpText = "\nI can create bitcoin transactions manually for you.", Name = "bitcoin-tx-creatr")]
 	public class ConsoleController
 	{
 		public IBitcoinTxCreatr TxCreatr { get; set; }
