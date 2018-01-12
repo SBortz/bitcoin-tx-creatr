@@ -14,7 +14,7 @@ namespace bitcoin_tx_creatr
 		public IBitcoinTxCreatr TxCreatr { get; set; }
 		public ITransactionConsoleWriter Writer { get; set; }
 
-		[ApplicationMetadata(Description = "Creates an empty transaction")]
+		[ApplicationMetadata(Name = "create", Description = "Creates an empty transaction")]
 		public void Create()
 	    {
 		    var tx = this.TxCreatr.Create();
@@ -22,7 +22,7 @@ namespace bitcoin_tx_creatr
 			this.Writer.WriteTransaction(tx);
 	    }
 
-	    [ApplicationMetadata(Description = "Takes a raw transaction and returns it in json format", ExtendedHelpText = "\nTakes a raw transaction and returns it in json format")]
+	    [ApplicationMetadata(Name = "show", Description = "Takes a raw transaction and returns it in json format", ExtendedHelpText = "\nTakes a raw transaction and returns it in json format")]
 		public int Show([Argument(Description = "Raw transaction in hex format")]string transactionHex)
 	    {
 			if (string.IsNullOrWhiteSpace(transactionHex))
@@ -44,7 +44,7 @@ namespace bitcoin_tx_creatr
 		    }
 		}
 
-	    [ApplicationMetadata(Description = "Takes a raw transaction and adds an unspent transaction (UTXO) to it.")]
+	    [ApplicationMetadata(Name = "add-in", Description = "Takes a raw transaction and adds an unspent transaction (UTXO) to it.")]
 		public int AddIn([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Description = "UTXO transaction-id")]string txId, [Argument(Description = "UTXO index")]int index)
 	    {
 		    var tx = this.TxCreatr.AddIn(transactionHex, txId, index);
@@ -53,7 +53,7 @@ namespace bitcoin_tx_creatr
 			return 0;
 	    }
 
-	    [ApplicationMetadata(Description = "Takes a raw transaction and removes a transaction input from it.")]
+	    [ApplicationMetadata(Name = "remove-in", Description = "Takes a raw transaction and removes a transaction input from it.")]
 	    public int RemoveIn([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "index", Description = "Index of vout")]int index)
 	    {
 		    var tx = this.TxCreatr.RemoveIn(transactionHex, index);
@@ -62,7 +62,7 @@ namespace bitcoin_tx_creatr
 		    return 0;
 	    }
 
-		[ApplicationMetadata(Description = "Takes a raw transaction and adds a transaction output to it.")]
+		[ApplicationMetadata(Name = "add-out", Description = "Takes a raw transaction and adds a transaction output to it.")]
 		public int AddOut([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "address",Description = "Bitcoin address (Base58Check)")]string addressString, [Argument(Name = "amount", Description = "Amount of Bitcoins to send to address in BTC. (Format 0.005) ")]string amountString)
 		{
 			var tx = this.TxCreatr.AddOut(transactionHex, addressString, amountString);
@@ -71,7 +71,7 @@ namespace bitcoin_tx_creatr
 		    return 0;
 	    }
 
-	    [ApplicationMetadata(Description = "Takes a raw transaction and sets the amount of an existing transaction output.")]
+	    [ApplicationMetadata(Name = "set-out-amount", Description = "Takes a raw transaction and sets the amount of an existing transaction output.")]
 	    public int SetAmount([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "index", Description = "Index of vout")]int index, [Argument(Name = "amount", Description = "Amount of Bitcoins to send to address in BTC. (Format 0.005)")]string amountString)
 	    {
 		    var tx = this.TxCreatr.SetAmount(transactionHex, index, amountString);
@@ -80,7 +80,7 @@ namespace bitcoin_tx_creatr
 		    return 0;
 	    }
 
-	    [ApplicationMetadata(Description = "Takes a raw transaction and sets the amount of an existing transaction output.")]
+	    [ApplicationMetadata(Name = "set-tx-lockvalue", Description = "Takes a raw transaction and sets the amount of an existing transaction output.")]
 	    public int SetLockValue([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "lockvalue", Description = "Values > 0 && < 500000000 are interpreted as block height. Above that -> Unix epoch timestamps.")]int lockvalue)
 	    {
 		    var tx = this.TxCreatr.SetLockValue(transactionHex, lockvalue);
@@ -89,7 +89,7 @@ namespace bitcoin_tx_creatr
 		    return 0;
 	    }
 
-		[ApplicationMetadata(Description = "Takes a raw transaction and removes a transaction output from it.")]
+		[ApplicationMetadata(Name = "remove-out", Description = "Takes a raw transaction and removes a transaction output from it.")]
 	    public int RemoveOut([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "index", Description = "Index of vout")]int index)
 		{
 			var tx = this.TxCreatr.RemoveOut(transactionHex, index);
@@ -99,8 +99,8 @@ namespace bitcoin_tx_creatr
 	    }
 
 
-		[ApplicationMetadata(Description = "Takes a raw transaction and signs it.")]
-	    public int Sign([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "index", Description = "Index of transaction input")]int index, [Argument(Name = "privatekey", Description = "Private key (WIF)")]string privateKeyString)
+		[ApplicationMetadata(Name = "sign-in", Description = "Takes a raw transaction and signs it.")]
+	    public int SignIn([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "index", Description = "Index of transaction input")]int index, [Argument(Name = "privatekey", Description = "Private key (WIF)")]string privateKeyString)
 		{
 			var tuple = this.TxCreatr.SignIn(transactionHex, index, privateKeyString);
 			Console.WriteLine($"You signed your transaction on the {tuple.Item2}");
@@ -109,7 +109,7 @@ namespace bitcoin_tx_creatr
 		    return 0;
 	    }
 
-	    [ApplicationMetadata(Description = "Takes a raw transaction and calculates the total output and fee.")]
+	    [ApplicationMetadata(Name = "get-outputs", Description = "Takes a raw transaction and calculates the total output and fee.")]
 	    public int GetOutputs([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Description = "Bitcoin amount of txin in BTC (Format: 0.005)")]string amountInString)
 	    {
 		    var tx = new Transaction(transactionHex);
