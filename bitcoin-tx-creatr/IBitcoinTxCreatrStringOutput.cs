@@ -13,7 +13,7 @@ namespace bitcoin_tx_creatr
 
 		string SetLockValue(string transactionHex, int lockvalue);
 		string RemoveOut(string transactionHex, int index);
-		string Sign(string transactionHex, string privateKeyString);
+		string SignIn(string transactionHex, int index, string privateKeyString);
 
 	}
 }

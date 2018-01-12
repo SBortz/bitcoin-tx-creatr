@@ -100,9 +100,9 @@ namespace bitcoin_tx_creatr
 
 
 		[ApplicationMetadata(Description = "Takes a raw transaction and signs it.")]
-	    public int Sign([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "privatekey", Description = "Private key (WIF)")]string privateKeyString)
+	    public int Sign([Argument(Description = "Raw Transaction hex")]string transactionHex, [Argument(Name = "index", Description = "Index of transaction input")]int index, [Argument(Name = "privatekey", Description = "Private key (WIF)")]string privateKeyString)
 		{
-			var tuple = this.TxCreatr.Sign(transactionHex, privateKeyString);
+			var tuple = this.TxCreatr.SignIn(transactionHex, index, privateKeyString);
 			Console.WriteLine($"You signed your transaction on the {tuple.Item2}");
 			this.Writer.WriteTransaction(tuple.Item1);
 

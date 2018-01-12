@@ -41,9 +41,9 @@ namespace bitcoin_tx_creatr
 			return this.TxCreatr.RemoveOut(transactionHex, index).ToHex();
 		}
 
-		public string Sign(string transactionHex, string privateKeyString)
+		public string SignIn(string transactionHex, int index, string privateKeyString)
 		{
-			return this.TxCreatr.Sign(transactionHex, privateKeyString).Item1.ToHex();
+			return this.TxCreatr.SignIn(transactionHex, index, privateKeyString).Item1.ToHex();
 		}
 	}
 }

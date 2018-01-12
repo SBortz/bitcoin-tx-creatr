@@ -12,6 +12,6 @@ namespace bitcoin_tx_creatr
 		Transaction SetAmount(string transactionHex, int index, string amountString);
 		Transaction SetLockValue(string transactionHex, int lockvalue);
 		Transaction RemoveOut(string transactionHex, int index);
-		Tuple<Transaction, string> Sign(string transactionHex, string privateKeyString);
+		Tuple<Transaction, string> SignIn(string transactionHex, int index, string privateKeyString);
 	}
 }
