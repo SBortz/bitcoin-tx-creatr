@@ -4,18 +4,25 @@ In the approach of understanding bitcoin transactions i liked the idea of having
 
 So i created this little console app using .NET Core 2.0. It outputs the transaction always in json format and hex. The hex output can then be used as an input for another manipulation. So you can construct a full and valid bitcoin transaction that will be accepted by bitcoin nodes.
 
+<b>IMPORTANT: This is the first version and it works only for very simple transactions with one input at the moment. Use it for learning/testing purposes only.</b>
+
 # Using the app
 ## Overview of app usage
 
 To create a transaction is fairly simple. Just type 
 
-This is a .NET Core 2.0 command line project, so you can use it after cloning the git repository by using this command:
+This is a .NET Core 2.0 command line project. So after cloning the repository, publish it for your type of platform:
 ```
-dotnet bitcoin-tx-creatr.dll --help
+dotnet publish -c Release -r win10-x64
+dotnet publish -c Release -r ubuntu.16.10-x64
 ```
 
-This leads to the overview of all commands.
+Then use it like this:
+```
+bitcoin-tx-creatr.exe --help
+```
 
+This leads to the overview of all commands:
 ```
 Hey, bitcoin-tx-creatr here :) How can i help you? 1.0.0
 
@@ -47,7 +54,7 @@ I can create bitcoin transactions manually for you.
 Create a new transaction by typing:
 
 ```
-dotnet bitcoin-tx-creatr.dll create
+bitcoin-tx-creatr.exe create
 ```
 
 Bitcoint-Tx-Creatr creates an empty transaction and outputs it in json & hex formats.
@@ -71,7 +78,7 @@ Here is your transaction (hex)
 ### Adding a transaction input
 
 ```
-dotnet bitcoin-tx-creatr.dll addin previousTransactionHex txId index
+bitcoin-tx-creatr.exe addin previousTransactionHex txId index
 ```
 
 ```
@@ -102,7 +109,7 @@ Here is your transaction (hex)
 ### Adding a transaction output
 
 ```
-dotnet bitcoin-tx-creatr.dll addout previousTransactionHex address amount
+bitcoin-tx-creatr.exe addout previousTransactionHex address amount
 ```
 
 ```
@@ -138,7 +145,7 @@ Here is your transaction (hex)
 ### Sign transaction
 
 ```
-dotnet bitcoin-tx-creatr.dll sign previousTransactionHex privateKey
+bitcoin-tx-creatr.exe sign previousTransactionHex privateKey
 ```
 
 ```
