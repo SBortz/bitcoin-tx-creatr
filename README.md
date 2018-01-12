@@ -9,8 +9,6 @@ So i created this little console app using .NET Core 2.0. It outputs the transac
 # Using the app
 ## Overview of app usage
 
-To create a transaction is fairly simple. Just type 
-
 This is a .NET Core 2.0 command line project. So after cloning the repository, publish it for your type of platform:
 ```
 dotnet publish -c Release -r win10-x64
@@ -51,13 +49,12 @@ I can create bitcoin transactions manually for you.
 
 ## Creating a transaction from scratch
 
-Create a new transaction by typing:
-
+To create a transaction is fairly simple. Just type:
 ```
 bitcoin-tx-creatr.exe create
 ```
 
-Bitcoint-Tx-Creatr creates an empty transaction and outputs it in json & hex formats.
+This creates an empty transaction and outputs it in json & hex formats.
 ```
 Here is your transaction (json)
 {
@@ -77,10 +74,12 @@ Here is your transaction (hex)
 
 ### Adding a transaction input
 
+Then add a transaction input by copying the hex-output and using it as input for the addin command:
 ```
 bitcoin-tx-creatr.exe addin previousTransactionHex txId index
 ```
 
+Now the transaction has an input:
 ```
 Here is your transaction (json)
 {
@@ -108,10 +107,12 @@ Here is your transaction (hex)
 
 ### Adding a transaction output
 
+To add outputs, again use the hex-output of the previous step and use it as input for the addout-command. Also provide an address and an amount (BTC).
 ```
 bitcoin-tx-creatr.exe addout previousTransactionHex address amount
 ```
 
+This adds the address to the transaction out via a simple P2PKH locking script.
 ```
 Here is your transaction (json)
 {
@@ -144,10 +145,12 @@ Here is your transaction (hex)
 
 ### Sign transaction
 
+The last step before being able to execute the transaction is signing it. Use the output again and sign it with your private key.
 ```
 bitcoin-tx-creatr.exe sign previousTransactionHex privateKey
 ```
 
+And that´s it. Send the transaction (hex) to the bitcoin network. For example via https://live.blockcypher.com/btc/pushtx/ or the bitcoin core client:
 ```
 You signed your transaction on the TestNet
 Here is your transaction (json)
@@ -178,5 +181,3 @@ Here is your transaction (json)
 Here is your transaction (hex)
 0100000001bade5287053e267083e2afa4c8819dc5c32b194865046cecea34b1f1f1e8b73f000000006b48304502210096e1c9d1f4b72db6819330736012646119894a4ded3e01d43759de98956c77e302205e588345e63b1e07d8dd8d222facdb8e208b3b7e9e7e0090a20bc479f85ddbb5012103427e0db2662bb9c5b9aa6eb77bff244570751431dc2ab2099ee22da6b843cc2cffffffff0100e1f505000000001976a914c5779b05e5f272284665befc881e9e8c4eb8d82b88ac00000000
 ```
-
-And that´s it. Send the transaction (hex) to the bitcoin network. For example via https://live.blockcypher.com/btc/pushtx/ or the bitcoin core client.
