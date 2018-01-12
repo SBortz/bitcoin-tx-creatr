@@ -47,7 +47,7 @@ Commands:
   SetAmount     Takes a raw transaction and sets the amount of an existing transaction output.
   SetLockValue  Takes a raw transaction and sets the amount of an existing transaction output.
   Show          Takes a raw transaction and returns it in json format.
-  Sign          Takes a raw transaction and signs it.
+  SignIn          Takes a raw transaction and signs it.
 
 Use "dotnet bitcoin-tx-creatr.dll [command] --help" for more information about a command.
 
@@ -148,7 +148,7 @@ Here is your transaction (hex)
 
 Sign the transaction with your private key (WIF).
 ```
-> bitcoin-tx-creatr.exe sign previousTransactionHex privateKey
+> bitcoin-tx-creatr.exe sign previousTransactionHex index privateKey
 
 You signed your transaction on the TestNet
 Here is your transaction (json)
