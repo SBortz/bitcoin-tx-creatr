@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RootNamespace>bitcoin_tx_creatr</RootNamespace>
+    <AssemblyName>txr</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
