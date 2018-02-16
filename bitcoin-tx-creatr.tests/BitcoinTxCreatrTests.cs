@@ -10,17 +10,28 @@ namespace bitcoin_tx_creatr.tests
     {
 	    private IBitcoinTxCreatrStringOutput txCreatr;
 
-	    string outAddress1 = "myX4hBezqR4mM6L37e2xBG8EyaNCjTnDHR";
-	    string outAmount1 = "0.0025";
+	    private string emptyTx = "01000000000000000000";
 
-	    string outAmount2 = "1";
+		// Tx with 1 in (famous Pizza tx)
+	    private string txWithPizzaIn = "01000000012a0cc4177bf6b3243183c77a179ed31f501b8bf7ab7b35d846fa76e4b6add2490000000000ffffffff0000000000";
+
+		// Tx with out for address "myX4hBezqR4mM6L37e2xBG8EyaNCjTnDHR" and amount "0.0025"
+		private string txWith1OutAmount00025 = "01000008000190d00300000000001976a914c5779b05e5f272284665befc881e9e8c4eb8d82b88ac00000000";
+		private string txWith1OutAmount1 = "01000008000100e1f505000000001976a914c5779b05e5f272284665befc881e9e8c4eb8d82b88ac00000000";
+		private string outAddress = "myX4hBezqR4mM6L37e2xBG8EyaNCjTnDHR";
+	    private string outAmount00025 = "0.0025";
+	    private string outAmount1 = "1";
 
 		private int lockTime1 = 1;
-	    private int lockTime2 = 499000000;
+
+	    private string txWith1OutAmount00025LockTime1 = "01000008000190d00300000000001976a914c5779b05e5f272284665befc881e9e8c4eb8d82b88ac01000000";
+
+		private int lockTime2 = 499000000;
 	    private int lockTime3 = 500000000;
 
-	    private string txIdIn1 = "3fb7e8f1f1b134eaec6c046548192bc3c59d81c8a4afe28370263e058752deba";
-	    string privateKey1 = "cN5Ybcxaks2khiKCQu7ymg4KryLeTDJuNcYdeS8DXDK7S8CWx6RZ";
+		// TxWithPizzaIn with valid unlocking script (privateKey = "cN5Ybcxaks2khiKCQu7ymg4KryLeTDJuNcYdeS8DXDK7S8CWx6RZ")
+		private string txWithPizzaInSigned = "01000000012a0cc4177bf6b3243183c77a179ed31f501b8bf7ab7b35d846fa76e4b6add249000000006a47304402202926ddea1d7a45b1c2e3be03e4ae09840281d9dadfdd5fb90ddaa3b5494f7cd902203d33ff341d4887b8c9fadbf24ac537c2520ac116a82f216e36c37fdc6359fc91012103427e0db2662bb9c5b9aa6eb77bff244570751431dc2ab2099ee22da6b843cc2cffffffff0000000000";
+		private string privateKey1 = "cN5Ybcxaks2khiKCQu7ymg4KryLeTDJuNcYdeS8DXDK7S8CWx6RZ";
 
 		public BitcoinTxCreatrTests()
 	    {
@@ -32,120 +43,67 @@ namespace bitcoin_tx_creatr.tests
 	    [Fact]
         public void ShouldCreate()
         {
-	        var resultTx = new Transaction().ToHex();
 	        var tx = this.txCreatr.Create();
 
-			Assert.Equal(tx, resultTx);
+			Assert.Equal(tx, this.emptyTx);
         }
 
 		[Fact]
 	    public void ShouldAddIn()
 		{
-			string txId = "49d2adb6e476fa46d8357babf78b1b501fd39e177ac7833124b3f67b17c40c2a";
+			string pizzaTxIn = "49d2adb6e476fa46d8357babf78b1b501fd39e177ac7833124b3f67b17c40c2a";
 			int index = 0;
-			var expectedTx = GetTxWithIn(txId, index);
 
-			var tx = this.txCreatr.AddIn(new Transaction().ToHex(), txId, index);
+			var tx = this.txCreatr.AddIn(new Transaction().ToHex(), pizzaTxIn, index);
 
-			Assert.Equal(expectedTx.ToHex(), tx);
+			Assert.Equal(this.txWithPizzaIn, tx);
 		}
 
 	    [Fact]
 	    public void ShouldRemoveIn()
 	    {
-		    var expectedTx = GetTxPizzaIn();
-		    expectedTx.Inputs.RemoveAt(0);
+		    var tx = this.txCreatr.RemoveIn(this.txWithPizzaIn, 0);
 
-		    var tx = this.txCreatr.RemoveIn(GetTxPizzaIn().ToHex(), 0);
-
-			Assert.Equal(expectedTx.ToHex(), tx);
+			Assert.Equal(this.emptyTx, tx);
 	    }
 
 	    [Fact]
 	    public void ShouldAddOut()
 	    {
-			var expectedTx = GetTxWithOut(this.outAddress1, this.outAmount1);
+			var tx = this.txCreatr.AddOut(this.emptyTx, this.outAddress, this.outAmount00025);
 
-		    var tx = this.txCreatr.Create();
-		    tx = this.txCreatr.AddOut(tx, this.outAddress1, this.outAmount1);
-
-			Assert.Equal(expectedTx.ToHex(), tx);
+			Assert.Equal(this.txWith1OutAmount00025, tx);
 	    }
-
 
 	    [Fact]
 	    public void ShouldSetAmount()
 	    {
-		    var expectedTx = GetTxWithOut(this.outAddress1, this.outAmount1);
-		    expectedTx.Outputs.First().Value = this.outAmount2;
+		    var tx = this.txCreatr.SetAmount(this.txWith1OutAmount00025, 0, this.outAmount1);
 
-		    var tx = this.txCreatr.SetAmount(GetTxWithOut(this.outAddress1, this.outAmount1).ToHex(), 0, this.outAmount2);
-
-			Assert.Equal(expectedTx.ToHex(), tx);
+			Assert.Equal(this.txWith1OutAmount1, tx);
 	    }
 
 	    [Fact]
 	    public void ShouldSetLockValue()
 	    {
-		    var expectedTx = GetTxWithOut(this.outAddress1, this.outAmount1);
-			expectedTx.LockTime = new LockTime(this.lockTime1);
+		    var tx = this.txCreatr.SetLockValue(this.txWith1OutAmount00025, this.lockTime1);
 
-		    var tx = this.txCreatr.SetLockValue(GetTxWithOut(this.outAddress1, this.outAmount1).ToHex(), this.lockTime1);
-
-			Assert.Equal(expectedTx.ToHex(), tx);
+			Assert.Equal(this.txWith1OutAmount00025LockTime1, tx);
 	    }
 
 	    [Fact]
 	    public void ShouldRemoveOut()
 	    {
-		    var expectedTx = GetTxWithOut(this.outAddress1, this.outAmount1);
-			expectedTx.Outputs.RemoveAt(0);
-
-		    var tx = this.txCreatr.RemoveOut(GetTxWithOut(this.outAddress1, this.outAmount1).ToHex(), 0);
-			Assert.Equal(expectedTx.ToHex(), tx);
+		    var tx = this.txCreatr.RemoveOut(this.txWith1OutAmount00025, 0);
+			Assert.Equal(this.emptyTx, tx);
 	    }
 
 	    [Fact]
 	    public void ShouldSign()
-	    {
-		    var expectedTx = GetTxWithIn(this.txIdIn1, 0);
+		{
+		    var tx = this.txCreatr.SignIn(this.txWithPizzaIn, 0, this.privateKey1);
 
-			var privKey = new BitcoinSecret(this.privateKey1);
-		    expectedTx.Inputs.First().ScriptSig = privKey.ScriptPubKey;
-		    expectedTx.Sign(privKey, false);
-
-		    var tx = this.txCreatr.SignIn(GetTxWithIn(this.txIdIn1, 0).ToHex(), 0, this.privateKey1);
-
-			Assert.Equal(expectedTx.ToHex(), tx);
-	    }
-
-	    private static Transaction GetTxWithOut(string addressString, string amountString)
-	    {
-		    var address = BitcoinAddress.Create(addressString);
-		    var scriptPubKey = new Script(address.ScriptPubKey.ToString());
-		    var amount = new Money(Convert.ToDecimal(amountString, CultureInfo.InvariantCulture), MoneyUnit.BTC);
-
-		    var tx = new Transaction();
-		    tx.AddOutput(new TxOut(amount, scriptPubKey));
-		    return tx;
-	    }
-
-		private static Transaction GetTxPizzaIn()
-	    {
-			// Pizza transaction id
-		    string txId = "49d2adb6e476fa46d8357babf78b1b501fd39e177ac7833124b3f67b17c40c2a";
-		    int index = 0;
-		    return GetTxWithIn(txId, index);
-	    }
-
-	    private static Transaction GetTxWithIn(string txId, int index)
-	    {
-			var tx = new Transaction();
-		    var outTxId = new uint256(txId);
-		    var outPoint = new OutPoint(outTxId, index);
-		    var txIn = new TxIn(outPoint);
-		    tx.Inputs.Add(txIn);
-		    return tx;
+			Assert.Equal(this.txWithPizzaInSigned, tx);
 	    }
     }
 }
