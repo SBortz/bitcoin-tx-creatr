@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandDotNet" Version="1.1.26" />
+    <PackageReference Include="CommandDotNet" Version="2.0.12" />
     <PackageReference Include="CommandDotNet.IoC.Autofac" Version="1.0.0" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
     <PackageReference Include="NBitcoin" Version="4.0.0.51" />
