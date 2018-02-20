@@ -27,7 +27,7 @@ dotnet publish -c Release -r ubuntu.16.10-x64
 This leads to the overview of all commands:
 
 ```
-> bitcoin-tx-creatr.exe --help
+> txr --help
 
 Hey, bitcoin-tx-creatr here :) How can i help you? 1.0.0
 
@@ -59,7 +59,7 @@ I can create bitcoin transactions manually for you.
 Creating a new transaction is fairly simple. Here is how an empty transaction is created.
 
 ```
-> bitcoin-tx-creatr.exe create
+> txr create
 
 Here is your transaction (json)
 {
@@ -81,7 +81,7 @@ Here is your transaction (hex)
 
 Then add a transaction input by copying the hex-output and using it as input for the addin command:
 ```
-> bitcoin-tx-creatr.exe add-in previousTransactionHex txId index
+> txr add-in previousTransactionHex txId index
 
 Here is your transaction (json)
 {
@@ -113,7 +113,7 @@ Use the addout command to add a transaction output. Also provide an address and 
 
 <b> At the moment P2PKH is supported only. </b>
 ```
-> bitcoin-tx-creatr.exe add-out previousTransactionHex address amount
+> txr add-out previousTransactionHex address amount
 
 Here is your transaction (json)
 {
@@ -148,7 +148,7 @@ Here is your transaction (hex)
 
 Sign the transaction with your private key (WIF).
 ```
-> bitcoin-tx-creatr.exe sign-in previousTransactionHex index privateKey
+> txr sign-in previousTransactionHex index privateKey
 
 You signed your transaction on the TestNet
 Here is your transaction (json)
