@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bitcoin-tx-creatr", "bitcoin-tx-creatr\bitcoin-tx-creatr.csproj", "{F795E11E-62DC-4FFB-8D3C-3BD7B6C1563A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bitcoin-tx-creatr.tests", "bitcoin-tx-creatr.tests\bitcoin-tx-creatr.tests.csproj", "{CDA5E366-0868-4E23-93C1-CBF2A4F6A56B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bitcoin-tx-creatr.tests", "bitcoin-tx-creatr.tests\bitcoin-tx-creatr.tests.csproj", "{CDA5E366-0868-4E23-93C1-CBF2A4F6A56B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bitcoin-key-formatr", "bitcoin-key-formatr\bitcoin-key-formatr.csproj", "{AFD27A08-5732-41FA-9D83-A104E8AA11D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CDA5E366-0868-4E23-93C1-CBF2A4F6A56B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDA5E366-0868-4E23-93C1-CBF2A4F6A56B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDA5E366-0868-4E23-93C1-CBF2A4F6A56B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFD27A08-5732-41FA-9D83-A104E8AA11D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFD27A08-5732-41FA-9D83-A104E8AA11D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFD27A08-5732-41FA-9D83-A104E8AA11D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFD27A08-5732-41FA-9D83-A104E8AA11D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
